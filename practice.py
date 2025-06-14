@@ -1,39 +1,21 @@
 from ttkbootstrap import *
-from ttkbootstrap.constants import *
 from tkinter import messagebox
+from ttkbootstrap.constants import *
+from PIL import ImageTk, Image
 
 window = Window(themename='darkly')
-window.title('Calculator')
-
+window.iconbitmap(r"C:\Users\HP\Downloads\icons8-google-password-240.ico")
+window.title('Password Manager')
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
-x = int((screen_width / 2) - (500 / 2))
-y = int((screen_height / 2) - (500 / 2) - 40)
-window.geometry(f'500x500+{x}+{y}')
+window_width = 500
+window_height = 300
+x = int((screen_width / 2) - (window_width / 2))
+y = int((screen_height / 2) - (window_height / 2))
+window.geometry(f'{window_width}x{window_height}+{x}+{y}')
 window.resizable(False, False)
-window.config(bg='#1e1e1e')
-
-def on_enter(event):
-    user_input = c_entry.get()
-    try:
-        result = eval(user_input)
-        messagebox.showinfo("Result", f"Result: {result}")
-    except Exception as e:
-        messagebox.showerror("Error", "Invalid expression")
-
-def pressed(c):
-    c_entry.insert(END, c)
-
-# ✅ Use only supported options for ttk.Entry
-c_entry = Entry(window, font=('Helvetica', 20), justify='right')
-c_entry.pack(fill='x', ipady=20)
-c_entry.bind('<Return>', on_enter)
-
-# ✅ Styled buttons using ttkbootstrap
-plus = Button(window, text='+', command=lambda: pressed('+'), bootstyle='info-outline')
-plus.pack(side='left', anchor='n', ipadx=10, ipady=5)
-
-minus = Button(window, text='-', command=lambda: pressed('-'), bootstyle='success-outline')
-minus.pack(anchor='n', side='left', ipadx=15, ipady=5)
-
+icon = ImageTk.PhotoImage(Image.open(r'C:\Users\HP\Downloads\icons8-google-password-240.png'))
+Label(image=icon).pack()
+Quit_Button = Button(window, text='Exit Program', command=window.quit, bootstyle='success-outline')
+Quit_Button.pack()
 window.mainloop()
