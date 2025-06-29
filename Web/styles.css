@@ -1,0 +1,182 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fira Code', 'SF Mono', 'Source Code Pro', 'Menlo', 'Monaco', 'Consolas', monospace;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typing container */
+.typing-container {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    text-align: center;
+    position: relative;
+    line-height: 1.2;
+    font-feature-settings: 'liga' on, 'calt' on;
+}
+
+/* Typed text with ultra-smooth transitions */
+#typed-text {
+    display: inline-block;
+    color: #ffffff;
+    position: relative;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    text-rendering: optimizeLegibility;
+}
+
+/* Character-by-character animation */
+.char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    animation: charSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes charSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(-2px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* VS Code center collapse cursor animation */
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: #ffffff;
+    margin-left: 2px;
+    position: relative;
+    vertical-align: text-bottom;
+    border-radius: 1px;
+    
+    /* Center collapse animation */
+    animation: vsCodeCenterCollapse 1.2s ease-in-out infinite;
+    transform-origin: center center;
+    
+    /* Smooth transitions */
+    transition: all 0.1s ease;
+}
+
+/* True VS Code center collapse animation */
+@keyframes vsCodeCenterCollapse {
+    0% {
+        height: 1.1em;
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+    }
+    50% {
+        height: 1.1em;
+        opacity: 0.3;
+        transform: translateY(0) scaleY(0);
+    }
+    100% {
+        height: 1.1em;
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+    }
+}
+
+/* Faster center collapse when typing */
+.typing .cursor {
+    animation: vsCodeCenterCollapseFast 0.8s ease-in-out infinite;
+}
+
+@keyframes vsCodeCenterCollapseFast {
+    0% {
+        height: 1.1em;
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+    }
+    50% {
+        height: 1.1em;
+        opacity: 0.2;
+        transform: translateY(0) scaleY(0);
+    }
+    100% {
+        height: 1.1em;
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+    }
+}
+
+/* Static cursor during deletion - NO ANIMATION */
+.deleting .cursor {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    height: 1.1em;
+}
+
+/* Smooth text transitions */
+.text-transition {
+    animation: textFadeTransition 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes textFadeTransition {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-5px) scale(1.02);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Faster delete animation */
+.char-delete {
+    animation: charSlideOut 0.08s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+}
+
+@keyframes charSlideOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.95);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .typing-container {
+        padding: 0 20px;
+        font-size: clamp(1.8rem, 8vw, 3rem);
+    }
+}
+
+/* Better text selection */
+::selection {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}

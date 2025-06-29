@@ -1,33 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Grid</title>
-    <style>
-        .container{
-            border: 2px solid black;
-            display: grid;
-            grid-template-columns: 120px 120px;
-        }
-
-        .items{
-            border: 2px solid black;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Realistic Bouncing Ball with Floor</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body, html {
+      width: 100%; height: 100%;
+      overflow: hidden;
+    }
+    #canvas {
+      display: block;
+      background: linear-gradient(to bottom, #87CEEB, #98FB98);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="items">1</div>
-        <div class="items">2</div>
-        <div class="items">3</div>
-        <div class="items">4</div>
-        <div class="items">5</div>
-    </div>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Ball properties
+    const ball = {
+      x: W / 2,
+      y: 100,
+      radius: 25,
+      vy: 0,
+      gravity: 0.6,
+      damping: 0.75, // energy loss on bounce
+      color1: '#FF6B35',
+      color2: '#FF4500',
+      shadowColor: 'rgba(0,0,0,0.3)'
+    };
+
+    function drawFloor() {
+      const floorHeight = 100;
+      const gradient = ctx.createLinearGradient(0, H - floorHeight, 0, H);
+      gradient.addColorStop(0, '#8B4513');
+      gradient.addColorStop(1, '#654321');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, H - floorHeight, W, floorHeight);
+    }
+
+    function drawBall() {
+
+      // Compute squash/stretch based on velocity
+      const stretch = 1 - Math.min(0.3, Math.abs(ball.vy) / 30);
+      const squash = 1 + Math.min(0.3, Math.abs(ball.vy) / 30);
+      const scaleX = ball.vy < 0 ? stretch : squash;
+      const scaleY = ball.vy < 0 ? squash : stretch;
+
+      // Draw ball with gradient
+      ctx.save();
+      ctx.translate(ball.x, ball.y);
+      ctx.scale(scaleX, scaleY);
+      const grad = ctx.createRadialGradient(
+        -ball.radius * 0.2, -ball.radius * 0.2, ball.radius * 0.1,
+        0, 0, ball.radius
+      );
+      grad.addColorStop(0, ball.color1);
+      grad.addColorStop(1, ball.color2);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(0, 0, ball.radius, 0, Math.PI * 2);
+      ctx.shadowColor = 'rgba(0,0,0,0.15)';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function update() {
+      ball.vy += ball.gravity;
+      ball.y += ball.vy;
+
+      const floorHeight = 100;
+      // Bounce off floor
+      if (ball.y + ball.radius > H - floorHeight) {
+        ball.y = H - floorHeight - ball.radius;
+        ball.vy *= -ball.damping;
+      }
+    }
+
+    canvas.addEventListener('click', () => {
+      // Only bounce if ball is on or near the floor
+      const floorHeight = 100;
+      if (ball.y + ball.radius >= H - floorHeight - 5) {
+        ball.vy = -15; // give an upward velocity to bounce
+      }
+    });
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      drawFloor();
+      drawBall();
+      update();
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
 </body>
 </html>
