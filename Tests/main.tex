@@ -1,0 +1,2636 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------- PACKAGES -------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+  \tcbuselibrary{skins,breakable,xparse}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+  \usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing}
+\usepackage{pgfplots}
+  \pgfplotsset{compat=1.15}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{mdframed}
+\usepackage{marginnote}
+
+% ------------------- PAGE SETUP -------------------
+\geometry{
+  left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,
+  headheight=14pt,headsep=1cm,footskip=1cm,
+  marginparwidth=2cm,marginparsep=0.5cm
+}
+
+% ------------------- COLORS -------------------
+\definecolor{qblue}{RGB}{30,144,255}
+\definecolor{qgreen}{RGB}{34,139,34}
+\definecolor{qred}{RGB}{220,20,60}
+\definecolor{qorange}{RGB}{255,140,0}
+\definecolor{qpurple}{RGB}{138,43,226}
+\definecolor{qlightblue}{RGB}{173,216,230}
+\definecolor{qlightgreen}{RGB}{144,238,144}
+\definecolor{qlightgray}{RGB}{245,245,245}
+\definecolor{qdarkgray}{RGB}{105,105,105}
+\definecolor{qyellow}{RGB}{255,215,0}
+\definecolor{qteal}{RGB}{0,128,128}
+\definecolor{qindigo}{RGB}{75,0,130}
+
+% ------------------- CUSTOM TCBOX DEFINITIONS -------------------
+% Question box with title - IMPROVED VERSION
+\NewTColorBox{questiontitle}{ O{Question} }{%
+  enhanced,breakable,
+  colback=white,
+  colframe=qdarkgray,
+  boxrule=1.5pt,
+  arc=0pt,
+  left=15pt,
+  right=15pt,
+  top=20pt,
+  bottom=15pt,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  title={#1},
+  attach boxed title to top left={xshift=0pt,yshift=0pt},
+  boxed title style={
+    enhanced,
+    colback=qdarkgray,
+    colframe=qdarkgray,
+    arc=0pt,
+    boxrule=0pt,
+    left=15pt,
+    right=15pt,
+    top=8pt,
+    bottom=8pt,
+    width=\textwidth,
+    halign=left
+  }
+}
+
+% Part box with optional title - IMPROVED VERSION
+\NewTColorBox{partbox}{ O{Part} }{%
+  enhanced,breakable,
+  colback=white,
+  colframe=qblue,
+  boxrule=1.2pt,
+  arc=0pt,
+  left=12pt,
+  right=12pt,
+  top=18pt,
+  bottom=12pt,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title={#1},
+  attach boxed title to top left={xshift=0pt,yshift=0pt},
+  boxed title style={
+    enhanced,
+    colback=qblue,
+    colframe=qblue,
+    arc=0pt,
+    boxrule=0pt,
+    left=12pt,
+    right=12pt,
+    top=6pt,
+    bottom=6pt,
+    width=\textwidth,
+    halign=left
+  }
+}
+
+% Answer box
+\newtcolorbox{answerstyle}{%
+  enhanced,breakable,
+  colback=qgreen!10,colframe=qgreen,boxrule=1pt,arc=3pt,
+  left=6pt,right=6pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries,coltitle=qgreen,center title
+}
+
+% Strategy hint box
+\newtcolorbox{strategybox}{%
+  enhanced,breakable,
+  colback=qindigo!10,colframe=qindigo,boxrule=1pt,arc=3pt,
+  left=6pt,right=6pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries,coltitle=qindigo,
+  title={\textbf{Target}\quad Strategy Hint}
+}
+
+% Quick reference box - IMPROVED VERSION
+\newtcolorbox{quickrefbox}{%
+  enhanced,breakable,
+  colback=white,
+  colframe=qteal,
+  boxrule=1.2pt,
+  arc=0pt,
+  left=12pt,
+  right=12pt,
+  top=18pt,
+  bottom=12pt,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title={\textbf{Quick Reference}},
+  attach boxed title to top left={xshift=0pt,yshift=0pt},
+  boxed title style={
+    enhanced,
+    colback=qteal,
+    colframe=qteal,
+    arc=0pt,
+    boxrule=0pt,
+    left=12pt,
+    right=12pt,
+    top=6pt,
+    bottom=6pt,
+    width=\textwidth,
+    halign=left
+  }
+}
+
+% Real-world application box
+\newtcolorbox{applicationbox}{%
+  enhanced,breakable,
+  colback=qgreen!10,colframe=qgreen!80!black,boxrule=1pt,arc=3pt,
+  left=6pt,right=6pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries,coltitle=qgreen!80!black,
+  title={\textbf{App}\quad Real-World Application}
+}
+
+% Polar coordinate insight box
+\newtcolorbox{polarbox}{%
+  enhanced,breakable,
+  colback=qblue!5,colframe=qblue!80,boxrule=1pt,arc=3pt,
+  left=6pt,right=6pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries,coltitle=qblue!80,
+  title={\textbf{Polar}\quad Coordinate Insight}
+}
+
+% Warning/Note box
+\newtcolorbox{warningbox}{
+    enhanced,
+    colback=qorange!10,
+    colframe=qorange,
+    boxrule=1pt,
+    arc=3pt,
+    left=6pt,
+    right=6pt,
+    top=6pt,
+    bottom=6pt,
+    fonttitle=\bfseries,
+    coltitle=qorange,
+    breakable,
+    title={\textbf{!}\quad Warning}
+}
+
+% Concept/Important box
+\newtcolorbox{conceptbox}{
+    enhanced,
+    colback=qpurple!10,
+    colframe=qpurple,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    fonttitle=\bfseries,
+    coltitle=qpurple,
+    breakable,
+    title={\textbf{Key}\quad Key Concept}
+}
+
+% Tip box
+\newtcolorbox{tipbox}{
+    enhanced,
+    colback=qteal!10,
+    colframe=qteal,
+    boxrule=1pt,
+    arc=3pt,
+    left=6pt,
+    right=6pt,
+    top=6pt,
+    bottom=6pt,
+    fonttitle=\bfseries,
+    coltitle=qteal,
+    breakable,
+    title={\textbf{Tip}\quad Tip}
+}
+
+% ------------------- HEADER AND FOOTER -------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{qblue}{\textbf{The Qalam}}}
+\fancyhead[C]{\textcolor{qdarkgray}{\textbf{Complex Numbers}}}
+\fancyhead[R]{\textcolor{qblue}{\textbf{Exercise 1.1}}}
+\fancyfoot[C]{\textcolor{qblue}{\textbf{\thepage}}}
+\renewcommand{\headrulewidth}{0.8pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{qblue}\leaders\hrule height \headrulewidth\hfill}}
+
+% ------------------- CUSTOM COMMANDS -------------------
+\newcommand{\progress}[2]{%
+  \begin{center}\textcolor{qblue}{\textbf{Progress: #1 of #2}}\quad
+  \begin{tikzpicture}
+    \draw[qlightgray,thick](0,0)--(3,0);
+    \draw[qblue,thick](0,0)--({3*#1/#2},0);
+    \foreach \x in {1,...,#2}
+      \draw[qblue,fill=white]({3*\x/#2-3/(2*#2)},0) circle(2pt);
+    \foreach \x in {1,...,#1}
+      \draw[qblue,fill=qblue]({3*\x/#2-3/(2*#2)},0) circle(2pt);
+  \end{tikzpicture}
+  \end{center}%
+}
+
+\newcommand{\difficulty}[1]{%
+  \textcolor{qorange}{\textbf{Difficulty: }}
+  \foreach \x in {1,...,5}{
+    \ifnum\x<=#1 \textcolor{qorange}{\textbf{*}}\else\textcolor{qlightgray}{\textbf{o}}\fi
+  }%
+}
+
+\newcommand{\partseparatortikz}{%
+  \vspace{1em}
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[qblue, thick] (0,0) -- (2,0);
+      \draw[qblue, fill=qblue] (2.5,0) circle (3pt);
+      \draw[qblue, fill=qblue] (3.2,0) circle (3pt);
+      \draw[qblue, fill=qblue] (3.9,0) circle (3pt);
+      \draw[qblue, thick] (4.4,0) -- (6.4,0);
+    \end{tikzpicture}
+  \end{center}
+  \vspace{1em}
+}
+% ------------------- HYPERREF SETUP -------------------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=qblue,
+    urlcolor=qblue,
+    citecolor=qgreen,
+    pdfborder={0 0 0}
+}
+
+% ------------------- DOCUMENT SPACING -------------------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+% ------------------- LIST FORMATTING -------------------
+\setlist[itemize]{
+    leftmargin=1.5em,
+    itemsep=0.3em,
+    parsep=0pt,
+    topsep=0.5em
+}
+
+% ------------------- DOCUMENT -------------------
+\begin{document}
+
+% ========= TITLE PAGE =========
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  
+  % Main title with decorative box
+  \begin{tcolorbox}[enhanced, colback=qblue!10, colframe=qblue, boxrule=2pt, arc=5pt, width=0.8\textwidth]
+      \centering
+      \Huge\textbf{\textcolor{qblue}{Mathematics}}\\[0.5cm]
+      \Large\textcolor{qdarkgray}{Exercise 1.1}
+  \end{tcolorbox}
+  
+  \vspace{1.5cm}
+  
+  % Decorative line
+  \begin{tikzpicture}
+  \draw[qblue, thick] (0,0) -- (8,0);
+  \end{tikzpicture}
+  
+  \vspace{1.5cm}
+  
+  % Subject information
+  \begin{tcolorbox}[enhanced, colback=qlightgray, colframe=qdarkgray, boxrule=1pt, arc=3pt, width=0.6\textwidth]
+      \centering
+      \large\textbf{Complex Numbers}\\[0.3cm]
+      \normalsize Polar Coordinates \& Applications\\
+      \normalsize Pure Mathematics
+  \end{tcolorbox}
+  
+  \vspace{2cm}
+  
+  % Institution/Brand
+  \begin{tcolorbox}[enhanced, colback=qgreen!10, colframe=qgreen, boxrule=1.5pt, arc=4pt, width=0.5\textwidth]
+      \centering
+      \Large\textbf{\textcolor{qgreen}{The Qalam}}\\[0.2cm]
+      \small\textcolor{qdarkgray}{Educational Excellence}
+  \end{tcolorbox}
+  
+  \vfill
+  
+  % Bottom decorative elements
+  \begin{tikzpicture}
+      \draw[qblue, thick] (0,0) -- (2,0);
+      \draw[qblue, fill=qblue] (2.5,0) circle (3pt);
+      \draw[qblue, fill=qblue] (3.2,0) circle (3pt);
+      \draw[qblue, fill=qblue] (3.9,0) circle (3pt);
+      \draw[qblue, thick] (4.4,0) -- (6.4,0);
+  \end{tikzpicture}
+  
+  \vspace{1cm}
+\end{titlepage}
+
+\newpage
+
+% =================== MCQ 1 ===================
+\begin{questiontitle}[MCQ 1]
+\textbf{The main reason complex numbers were developed was to:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Extend the real number system for unsolvable equations
+    \item Create a new type of geometry
+    \item Replace fractions and decimals
+    \item Simplify basic arithmetic operations
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Complex numbers were specifically developed to extend the real number system so that equations like \( x^2 + 1 = 0 \) would have solutions. These equations had no solutions within the realm of real numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Historical Context:} Complex numbers emerged in the 16th century when mathematicians encountered equations like \( x^2 + 1 = 0 \). The introduction of \( i = \sqrt{-1} \) allowed such "impossible" equations to have solutions: \( x = \pm i \).
+\end{conceptbox}
+
+\partseparatortikz
+\newpage
+% =================== MCQ 2 ===================
+\begin{questiontitle}[MCQ 2]
+\textbf{Which equation type motivated the creation of complex numbers?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Linear equations like \( 2x + 3 = 7 \)
+    \item Quadratic equations like \( x^2 + 1 = 0 \)
+    \item Simple fraction equations
+    \item Basic algebraic expressions
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Quadratic equations with negative discriminants, such as \( x^2 + 1 = 0 \), have no real solutions. Complex numbers were developed to provide solutions to these types of equations: \( x = \pm i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Key Insight:} When the discriminant \( b^2 - 4ac < 0 \) in the quadratic formula, we get \( \sqrt{\text{negative number}} \). Complex numbers make this possible through \( i = \sqrt{-1} \), giving us solutions like \( x = \frac{-b \pm i\sqrt{4ac - b^2}}{2a} \).
+\end{conceptbox}
+
+\partseparatortikz
+\newpage
+
+% =================== MCQ 3 ===================
+\begin{questiontitle}[MCQ 3]
+\textbf{The square root of a negative number in the realm of real numbers:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Always equals zero
+    \item Does not exist
+    \item Equals the negative of the number
+    \item Can be calculated using standard methods
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+In the real number system, there is no real number whose square gives a negative result. Since \( x^2 \geq 0 \) for all real \( x \), equations like \( x^2 = -1 \) have no real solutions.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Fundamental Limitation:} For any real number \( x \), \( x^2 \geq 0 \). This means \( \sqrt{-a} \) where \( a > 0 \) cannot exist in real numbers, creating the need for complex numbers.
+\end{conceptbox}
+
+\newpage
+
+% =================== MCQ 4 ===================
+\begin{questiontitle}[MCQ 4]
+\textbf{Which equation demonstrates why complex numbers were needed?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( x^2 = 4 \)
+    \item \( x^2 = -1 \)
+    \item \( x + 5 = 0 \)
+    \item \( 2x = 10 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The equation \( x^2 = -1 \) has no solution in real numbers because no real number squared gives a negative result. This type of equation motivated the creation of complex numbers with \( i = \sqrt{-1} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Historical Motivation:} Equations like \( x^2 + 1 = 0 \) were called "impossible" until mathematicians introduced \( i \) to represent \( \sqrt{-1} \), extending the number system beyond real numbers.
+\end{conceptbox}
+
+\newpage
+
+% =================== MCQ 5 ===================
+\begin{questiontitle}[MCQ 5]
+\textbf{What happens when we try to find \( \sqrt{-9} \) using only real numbers?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item We get \( -3 \)
+    \item We get \( 3 \)
+    \item It is undefined/does not exist
+    \item We get \( 9 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+\( \sqrt{-9} \) is undefined in real numbers because there is no real number that when squared gives \( -9 \). Note that \( (-3)^2 = 9 \), not \( -9 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Common Misconception:} Students often think \( \sqrt{-9} = -3 \), but \( (-3)^2 = 9 \), not \( -9 \). This impossibility in real numbers led to the development of imaginary numbers where \( \sqrt{-9} = 3i \).
+\end{conceptbox}
+
+\newpage
+
+% =================== MCQ 6 ===================
+\begin{questiontitle}[MCQ 6]
+\textbf{In the complex number \( z = a + ib \), what do \( a \) and \( b \) represent?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Both are imaginary numbers
+    \item Both are real numbers
+    \item \( a \) is real, \( b \) is imaginary
+    \item \( a \) is imaginary, \( b \) is real
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+In the standard form \( z = a + ib \), both \( a \) and \( b \) are real numbers. Here \( a \) is called the real part and \( b \) is the coefficient of the imaginary unit \( i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Standard Form:} Every complex number can be written as \( z = a + ib \) where \( a, b \in \mathbb{R} \). The term \( a \) is the real part, \( ib \) is the imaginary part, but \( b \) itself is real.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 7 ===================
+\begin{questiontitle}[MCQ 7]
+\textbf{In the definition of complex numbers, what does \( i \) represent?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item A real number
+    \item \( \sqrt{-1} \)
+    \item An integer
+    \item A rational number
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The symbol \( i \) represents the imaginary unit, defined as \( i = \sqrt{-1} \). This is the fundamental building block that allows us to extend real numbers to complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Imaginary Unit:} \( i = \sqrt{-1} \) is defined such that \( i^2 = -1 \). This single definition allows us to work with square roots of negative numbers and creates the entire complex number system.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 8 ===================
+\begin{questiontitle}[MCQ 8]
+\textbf{For the complex number \( z = 5 - 3i \), what are the values of \( a \) and \( b \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( a = 5, b = 3 \)
+    \item \( a = 5, b = -3 \)
+    \item \( a = -5, b = 3 \)
+    \item \( a = -5, b = -3 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Comparing \( z = 5 - 3i \) with the standard form \( z = a + ib \), we can rewrite it as \( z = 5 + (-3)i \). Therefore, \( a = 5 \) and \( b = -3 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Sign Convention:} When a complex number is written as \( z = a - bi \), remember that \( b \) is negative. Always rewrite in the form \( a + ib \) to identify components correctly.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 9 ===================
+\begin{questiontitle}[MCQ 9]
+\textbf{Which of the following is NOT a complex number according to the definition \( z = a + ib \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 7 \)
+    \item \( 2i \)
+    \item \( 3 + 4i \)
+    \item All of the above are complex numbers
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: D} \\
+All options are complex numbers: \( 7 = 7 + 0i \) (where \( b = 0 \)), \( 2i = 0 + 2i \) (where \( a = 0 \)), and \( 3 + 4i \) is already in standard form.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Universal Set:} Real numbers are a subset of complex numbers. Every real number \( r \) can be written as \( r + 0i \), and every purely imaginary number \( bi \) can be written as \( 0 + bi \).
+\end{conceptbox}
+
+\newpage
+
+% =================== MCQ 10 ===================
+\begin{questiontitle}[MCQ 10]
+\textbf{The set of all complex numbers is denoted by:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \mathbb{R} \)
+    \item \( \mathbb{C} \)
+    \item \( \mathbb{Z} \)
+    \item \( \mathbb{N} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The set of all complex numbers is denoted by \( \mathbb{C} \). This is the standard mathematical notation used universally to represent the complete set of complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Standard Notation:} \( \mathbb{C} \) represents the set of all complex numbers, just as \( \mathbb{R} \) represents real numbers, \( \mathbb{Z} \) represents integers, and \( \mathbb{N} \) represents natural numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 11 ===================
+\begin{questiontitle}[MCQ 11]
+\textbf{Which statement about the relationship between \( \mathbb{R} \) and \( \mathbb{C} \) is correct?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \mathbb{R} = \mathbb{C} \)
+    \item \( \mathbb{R} \subset \mathbb{C} \)
+    \item \( \mathbb{C} \subset \mathbb{R} \)
+    \item \( \mathbb{R} \) and \( \mathbb{C} \) have no relationship
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+\( \mathbb{R} \subset \mathbb{C} \) means that the set of real numbers is a subset of the set of complex numbers. Every real number can be written as \( a + 0i \), making it a special case of a complex number.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Set Hierarchy:} \( \mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R} \subset \mathbb{C} \). Complex numbers form the most comprehensive number system, containing all previous number sets as subsets.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 12 ===================
+\begin{questiontitle}[MCQ 12]
+\textbf{If \( z = 3 + 4i \), which notation correctly expresses that \( z \) is a complex number?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( z \in \mathbb{R} \)
+    \item \( z \in \mathbb{C} \)
+    \item \( z \subset \mathbb{C} \)
+    \item \( z = \mathbb{C} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The notation \( z \in \mathbb{C} \) means "\( z \) belongs to the set of complex numbers" or "\( z \) is an element of \( \mathbb{C} \)". This is the correct way to express membership in a set.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Membership Symbol:} The symbol \( \in \) means "belongs to" or "is an element of". For any complex number \( z \), we write \( z \in \mathbb{C} \) to show it belongs to the set of complex numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 13 ===================
+\begin{questiontitle}[MCQ 13]
+\textbf{Which of the following numbers does NOT belong to \( \mathbb{C} \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 5 \)
+    \item \( -2i \)
+    \item \( 1 + 3i \)
+    \item All of the above belong to \( \mathbb{C} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: D} \\
+All the given numbers belong to \( \mathbb{C} \): \( 5 = 5 + 0i \in \mathbb{C} \), \( -2i = 0 + (-2)i \in \mathbb{C} \), and \( 1 + 3i \in \mathbb{C} \). The set \( \mathbb{C} \) includes all possible complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Universal Property:} \( \mathbb{C} \) is the most comprehensive number set. Every number you can think of (natural, integer, rational, real, or complex) belongs to \( \mathbb{C} \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 14 ===================
+\begin{questiontitle}[MCQ 14]
+\textbf{How can the real number 7 be written as a complex number?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 7 + 0i \)
+    \item \( 0 + 7i \)
+    \item \( 7 - 7i \)
+    \item \( 7i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Every real number can be written as a complex number by adding \( 0i \) as the imaginary part. Therefore, \( 7 = 7 + 0i \), where the real part is 7 and the imaginary part is 0.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Real Numbers in Complex Form:} Any real number \( r \) can be expressed as \( r + 0i \). The imaginary part is zero, making it a special case of complex numbers where \( b = 0 \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 15 ===================
+\begin{questiontitle}[MCQ 15]
+\textbf{What is the imaginary part of the real number -5?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( -5 \)
+    \item \( 5 \)
+    \item \( 0 \)
+    \item \( -5i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Since \( -5 \) is a real number, it can be written as \( -5 + 0i \). The imaginary part is the coefficient of \( i \), which is 0.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Key Distinction:} For a complex number \( z = a + bi \), the imaginary part is \( b \) (not \( bi \)). For real numbers, this coefficient is always 0.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 16 ===================
+\begin{questiontitle}[MCQ 16]
+\textbf{Which statement about real numbers and complex numbers is TRUE?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real numbers and complex numbers are completely different
+    \item Every complex number is a real number
+    \item Every real number is a complex number
+    \item Real numbers cannot be written in complex form
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Every real number is a complex number with 0 as its imaginary part. This means \( \mathbb{R} \subset \mathbb{C} \), making real numbers a special subset of complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Subset Relationship:} Real numbers are not separate from complex numbers—they are a special case where the imaginary part equals zero. This is why \( \mathbb{R} \subset \mathbb{C} \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 17 ===================
+\begin{questiontitle}[MCQ 17]
+\textbf{If \( z = a + bi \) represents a real number, what must be true about \( b \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( b > 0 \)
+    \item \( b < 0 \)
+    \item \( b = 0 \)
+    \item \( b \) can be any real number
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+For a complex number \( z = a + bi \) to be a real number, the imaginary part must be zero, so \( b = 0 \). This gives us \( z = a + 0i = a \), which is purely real.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Condition for Real Numbers:} A complex number \( z = a + bi \) is real if and only if \( b = 0 \). This is the defining characteristic that distinguishes real numbers within the complex number system.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 18 ===================
+\begin{questiontitle}[MCQ 18]
+\textbf{The statement "\( \sqrt{-1} \) does not belong to the set of real numbers" is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item True
+    \item False
+    \item Sometimes true
+    \item Cannot be determined
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+The statement is true. \( \sqrt{-1} \) does not exist in the set of real numbers \( \mathbb{R} \) because no real number when squared gives a negative result. This is why \( \sqrt{-1} \notin \mathbb{R} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Notation Clarity:} We write \( \sqrt{-1} \notin \mathbb{R} \) to express that \( \sqrt{-1} \) does not belong to the set of real numbers. The symbol \( \notin \) means "does not belong to" or "is not an element of".
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 19 ===================
+\begin{questiontitle}[MCQ 19]
+\textbf{Why does \( \sqrt{-1} \) not belong to the set of real numbers?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Because it equals zero
+    \item Because no real number squared gives a negative result
+    \item Because it is too large
+    \item Because it is a fraction
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+\( \sqrt{-1} \) does not exist in real numbers because for any real number \( x \), we have \( x^2 \geq 0 \). There is no real number whose square equals \( -1 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Fundamental Property:} For all real numbers \( x \), \( x^2 \geq 0 \). This means positive numbers squared are positive, negative numbers squared are positive, and zero squared is zero. No real number squared can be negative.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 20 ===================
+\begin{questiontitle}[MCQ 20]
+\textbf{What do we call \( \sqrt{-1} \) for convenience, and how is it denoted?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real number, denoted by \( r \)
+    \item Imaginary number, denoted by \( i \)
+    \item Complex number, denoted by \( c \)
+    \item Rational number, denoted by \( q \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Since \( \sqrt{-1} \) does not belong to the set of real numbers, we call it an imaginary number for convenience and denote it by \( i \) (read as iota).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Imaginary Unit:} The symbol \( i \) (iota) represents \( \sqrt{-1} \). This single definition allows us to work with square roots of negative numbers and forms the foundation of complex numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 21 ===================
+\begin{questiontitle}[MCQ 21]
+\textbf{In the complex number \( z = a + ib \), what is \( a \) called and how is it denoted?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Imaginary part, denoted by \( \text{Im}(z) \)
+    \item Real part, denoted by \( \text{Re}(z) \)
+    \item Complex part, denoted by \( \text{Co}(z) \)
+    \item Coefficient, denoted by \( \text{Cf}(z) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+In the complex number \( z = a + ib \), \( a \) is called the real part and is denoted by \( \text{Re}(z) \) for convenience.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Real Part Notation:} For any complex number \( z = a + ib \), we write \( \text{Re}(z) = a \). This notation provides a convenient way to extract just the real component.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 22 ===================
+\begin{questiontitle}[MCQ 22]
+\textbf{In the complex number \( z = a + ib \), what is \( b \) called and how is it denoted?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real part, denoted by \( \text{Re}(z) \)
+    \item Imaginary part, denoted by \( \text{Im}(z) \)
+    \item Complex part, denoted by \( \text{Co}(z) \)
+    \item Iota part, denoted by \( \text{Io}(z) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+In the complex number \( z = a + ib \), \( b \) is called the imaginary part and is denoted by \( \text{Im}(z) \) for convenience.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Imaginary Part Notation:} For any complex number \( z = a + ib \), we write \( \text{Im}(z) = b \). Note that the imaginary part is the coefficient \( b \), not \( bi \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 23 ===================
+\begin{questiontitle}[MCQ 23]
+\textbf{For the complex number \( z = 3 + 4i \), what are \( \text{Re}(z) \) and \( \text{Im}(z) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \text{Re}(z) = 3, \text{Im}(z) = 4i \)
+    \item \( \text{Re}(z) = 3, \text{Im}(z) = 4 \)
+    \item \( \text{Re}(z) = 4, \text{Im}(z) = 3 \)
+    \item \( \text{Re}(z) = 4i, \text{Im}(z) = 3 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+For \( z = 3 + 4i \), comparing with \( z = a + ib \), we have \( a = 3 \) and \( b = 4 \). Therefore, \( \text{Re}(z) = 3 \) and \( \text{Im}(z) = 4 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Common Mistake:} Students often write \( \text{Im}(z) = 4i \), but the imaginary part is just the coefficient \( b = 4 \), not \( bi = 4i \). The \( i \) is part of the notation, not the value.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 24 ===================
+\begin{questiontitle}[MCQ 24]
+\textbf{What does the notation \( \text{Re}(z) \) represent?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item The entire complex number \( z \)
+    \item The real part of complex number \( z \)
+    \item The imaginary part of complex number \( z \)
+    \item The modulus of complex number \( z \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The notation \( \text{Re}(z) \) represents the real part of the complex number \( z \). It's a convenient way to denote just the real component.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Function Notation:} \( \text{Re}(z) \) and \( \text{Im}(z) \) are functions that extract specific parts of complex numbers. They make it easy to work with components separately.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 25 ===================
+\begin{questiontitle}[MCQ 25]
+\textbf{The product of a non-zero real number and \( i \) is called:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item A real number
+    \item An imaginary number
+    \item A complex number
+    \item A rational number
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The product of a non-zero real number and \( i \) is called an imaginary number. For example, \( 2i \), \( 3i \), and \( \sqrt{5}i \) are all imaginary numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Purely Imaginary Numbers:} Numbers of the form \( bi \) where \( b \neq 0 \) and \( b \in \mathbb{R} \) are called purely imaginary numbers. They have zero real part and non-zero imaginary part.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 26 ===================
+\begin{questiontitle}[MCQ 26]
+\textbf{Which of the following are imaginary numbers?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 2i, 3i, \sqrt{5}i \)
+    \item \( 2, 3, \sqrt{5} \)
+    \item \( 2 + i, 3 + i \)
+    \item \( 0, 1, -1 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+\( 2i \), \( 3i \), and \( \sqrt{5}i \) are all imaginary numbers because they are products of non-zero real numbers (2, 3, and \( \sqrt{5} \)) with the imaginary unit \( i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Pattern Recognition:} Any number of the form \( ai \) where \( a \) is a non-zero real number is an imaginary number. The coefficient can be positive, negative, rational, or irrational.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 27 ===================
+\begin{questiontitle}[MCQ 27]
+\textbf{Is \( -\frac{11}{2}i \) an imaginary number?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item No, because it has a negative coefficient
+    \item No, because it is a fraction
+    \item Yes, because it is the product of a non-zero real number and \( i \)
+    \item Yes, but only if we write it as positive
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Yes, \( -\frac{11}{2}i \) is an imaginary number because it is the product of the non-zero real number \( -\frac{11}{2} \) and the imaginary unit \( i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Coefficient Flexibility:} The real number coefficient in an imaginary number can be positive, negative, integer, fraction, or irrational. As long as it's non-zero and real, the product with \( i \) is imaginary.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 28 ===================
+\begin{questiontitle}[MCQ 28]
+\textbf{How can the imaginary number \( 3i \) be written in the standard form \( z = a + bi \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( z = 3 + 0i \)
+    \item \( z = 0 + 3i \)
+    \item \( z = 3 + 3i \)
+    \item \( z = 3i + 0 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The imaginary number \( 3i \) can be written as \( z = 0 + 3i \) in standard form, where the real part \( a = 0 \) and the imaginary part \( b = 3 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Purely Imaginary in Standard Form:} Imaginary numbers have the form \( z = 0 + bi \) where \( b \neq 0 \). This means \( \text{Re}(z) = 0 \) and \( \text{Im}(z) = b \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 29 ===================
+\begin{questiontitle}[MCQ 29]
+\textbf{What must be true about the coefficient for \( ki \) to be an imaginary number?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( k \) must be positive
+    \item \( k \) must be an integer
+    \item \( k \) must be non-zero and real
+    \item \( k \) must be rational
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+For \( ki \) to be an imaginary number, \( k \) must be non-zero and real. If \( k = 0 \), then \( ki = 0 \), which is real, not imaginary.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Zero Exception:} When \( k = 0 \), we get \( 0i = 0 \), which is a real number, not imaginary. This is why we specify "non-zero" in the definition of imaginary numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 30 ===================
+\begin{questiontitle}[MCQ 30]
+\textbf{If \( z = a + ib \) is a complex number, what is called the complex conjugate of \( z \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( a + ib \)
+    \item \( a - ib \)
+    \item \( -a + ib \)
+    \item \( -a - ib \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+If \( z = a + ib \) is a complex number, then \( a - ib \) is called the complex conjugate of \( z \). The real part stays the same, but the sign of the imaginary part is changed.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Conjugate Rule:} To find the complex conjugate, keep the real part unchanged and change the sign of the imaginary part. If \( z = a + ib \), then \( \bar{z} = a - ib \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 31 ===================
+\begin{questiontitle}[MCQ 31]
+\textbf{How is the complex conjugate of \( z \) denoted?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( z' \)
+    \item \( \bar{z} \)
+    \item \( z^* \)
+    \item \( \tilde{z} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The complex conjugate of \( z \) is denoted by \( \bar{z} \) (read as "z bar"). This is the standard notation used in mathematics.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Standard Notation:} The bar notation \( \bar{z} \) is universally used to denote complex conjugates. Some texts also use \( z^* \), but \( \bar{z} \) is more common.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 32 ===================
+\begin{questiontitle}[MCQ 32]
+\textbf{What is the complex conjugate of \( 5 + 4i \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 5 + 4i \)
+    \item \( 5 - 4i \)
+    \item \( -5 + 4i \)
+    \item \( -5 - 4i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The complex conjugate of \( 5 + 4i \) is \( 5 - 4i \). We keep the real part (5) unchanged and change the sign of the imaginary part from \( +4i \) to \( -4i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Step-by-Step Process:} For \( z = 5 + 4i \), identify \( a = 5 \) and \( b = 4 \). Then \( \bar{z} = a - ib = 5 - 4i \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 33 ===================
+\begin{questiontitle}[MCQ 33]
+\textbf{What is the complex conjugate of \( -2 + 3i \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( -2 + 3i \)
+    \item \( -2 - 3i \)
+    \item \( 2 + 3i \)
+    \item \( 2 - 3i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The complex conjugate of \( -2 + 3i \) is \( -2 - 3i \). We keep the real part (-2) unchanged and change the sign of the imaginary part from \( +3i \) to \( -3i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Negative Real Parts:} Even when the real part is negative, it remains unchanged in the conjugate. Only the sign of the imaginary part changes.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 34 ===================
+\begin{questiontitle}[MCQ 34]
+\textbf{If \( z = 7 - 2i \), what is \( \bar{z} \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 7 - 2i \)
+    \item \( 7 + 2i \)
+    \item \( -7 - 2i \)
+    \item \( -7 + 2i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+If \( z = 7 - 2i \), then \( \bar{z} = 7 + 2i \). The real part (7) stays the same, and the imaginary part changes from \( -2i \) to \( +2i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Sign Change Rule:} When the original complex number has a negative imaginary part, the conjugate will have a positive imaginary part, and vice versa.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 35 ===================
+\begin{questiontitle}[MCQ 35]
+\textbf{What is the complex conjugate of the real number 8?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( -8 \)
+    \item \( 8i \)
+    \item \( 8 \)
+    \item \( -8i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The complex conjugate of the real number 8 is 8 itself. Since \( 8 = 8 + 0i \), its conjugate is \( 8 - 0i = 8 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Real Number Property:} Real numbers are their own conjugates because they have zero imaginary part. If \( z = a + 0i \), then \( \bar{z} = a - 0i = a \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 36 ===================
+\begin{questiontitle}[MCQ 36]
+\textbf{What is \( (2 + 3i) + (4 + 5i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 6 + 8i \)
+    \item \( 8 + 6i \)
+    \item \( 6 + 15i \)
+    \item \( 2 + 20i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+\( (2 + 3i) + (4 + 5i) = (2 + 4) + (3 + 5)i = 6 + 8i \). Add the real parts together and the imaginary parts together.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Addition Rule:} To add complex numbers \( (a + bi) + (c + di) = (a + c) + (b + d)i \). Combine like terms: real with real, imaginary with imaginary.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 37 ===================
+\begin{questiontitle}[MCQ 37]
+\textbf{What is \( (7 + 15i) - (2 + 5i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 5 + 10i \)
+    \item \( 9 + 20i \)
+    \item \( 5 + 20i \)
+    \item \( 9 + 10i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+\( (7 + 15i) - (2 + 5i) = (7 - 2) + (15 - 5)i = 5 + 10i \). Subtract the real parts and subtract the imaginary parts.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Subtraction Rule:} To subtract complex numbers \( (a + bi) - (c + di) = (a - c) + (b - d)i \). Distribute the negative sign and combine like terms.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 38 ===================
+\begin{questiontitle}[MCQ 38]
+\textbf{What is \( (2 + 3i)(1 + 5i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 2 + 13i \)
+    \item \( -13 + 13i \)
+    \item \( 17 + 13i \)
+    \item \( 2 + 15i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+\( (2 + 3i)(1 + 5i) = 2(1) + 2(5i) + 3i(1) + 3i(5i) = 2 + 10i + 3i + 15i^2 = 2 + 13i + 15(-1) = -13 + 13i \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{FOIL Method:} Use distributive property (FOIL) and remember \( i^2 = -1 \). Multiply each term in the first complex number by each term in the second.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 39 ===================
+\begin{questiontitle}[MCQ 39]
+\textbf{What is \( (2 + i)^2 \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 4 + i \)
+    \item \( 3 + 4i \)
+    \item \( 5 + 4i \)
+    \item \( 4 + 4i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+\( (2 + i)^2 = (2 + i)(2 + i) = 4 + 2i + 2i + i^2 = 4 + 4i + (-1) = 3 + 4i \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Squaring Formula:} \( (a + bi)^2 = a^2 + 2abi + (bi)^2 = a^2 + 2abi + b^2i^2 = (a^2 - b^2) + 2abi \)
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 40 ===================
+\begin{questiontitle}[MCQ 40]
+\textbf{What is \( (3 + 2i)(3 - 2i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 9 - 4i \)
+    \item \( 5 \)
+    \item \( 13 \)
+    \item \( 9 + 4i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+\( (3 + 2i)(3 - 2i) = 9 - 6i + 6i - 4i^2 = 9 - 4(-1) = 9 + 4 = 13 \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Conjugate Property:} When multiplying a complex number by its conjugate \( (a + bi)(a - bi) = a^2 + b^2 \), the result is always a real number.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 41 ===================
+\begin{questiontitle}[MCQ 41]
+\textbf{The formula for adding two complex numbers \( (a + ib) + (c + id) \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (a + c) + i(b + d) \)
+    \item \( (a + c) + i(b - d) \)
+    \item \( (a - c) + i(b + d) \)
+    \item \( (ac) + i(bd) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+The addition formula is \( (a + ib) + (c + id) = (a + c) + i(b + d) \). Add the real parts together and the imaginary parts together.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Addition Rule:} Complex number addition follows the distributive property. Group real terms with real terms and imaginary terms with imaginary terms.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 42 ===================
+\begin{questiontitle}[MCQ 42]
+\textbf{The formula for multiplying a complex number by a real scalar \( k(a + ib) \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( ka + kb \)
+    \item \( ka + ikb \)
+    \item \( k + ia + ib \)
+    \item \( ka + ib \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The scalar multiplication formula is \( k(a + ib) = ka + ikb \). The scalar \( k \) multiplies both the real part and the imaginary part.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Distributive Property:} When multiplying by a scalar, distribute the scalar to both terms: \( k(a + ib) = k \cdot a + k \cdot ib = ka + ikb \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 43 ===================
+\begin{questiontitle}[MCQ 43]
+\textbf{The formula for subtracting two complex numbers \( (a + ib) - (c + id) \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (a + c) + i(b - d) \)
+    \item \( (a - c) + i(b + d) \)
+    \item \( (a - c) + i(b - d) \)
+    \item \( (a + c) + i(b + d) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The subtraction formula is \( (a + ib) - (c + id) = (a - c) + i(b - d) \). Subtract the real parts and subtract the imaginary parts.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Subtraction Rule:} Distribute the negative sign: \( (a + ib) - (c + id) = (a + ib) + (-c - id) = (a - c) + i(b - d) \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 44 ===================
+\begin{questiontitle}[MCQ 44]
+\textbf{The formula for multiplying two complex numbers \( (a + ib)(c + id) \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (ac + bd) + i(ad + bc) \)
+    \item \( (ac - bd) + i(ad + bc) \)
+    \item \( (ac + bd) + i(ad - bc) \)
+    \item \( (ac - bd) + i(ad - bc) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Using FOIL: \( (a + ib)(c + id) = ac + iad + ibc + i^2bd = ac + i(ad + bc) + (-1)bd = (ac - bd) + i(ad + bc) \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{FOIL Method:} First: \( ac \), Outer: \( iad \), Inner: \( ibc \), Last: \( i^2bd = -bd \). Combine: \( (ac - bd) + i(ad + bc) \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 45 ===================
+\begin{questiontitle}[MCQ 45]
+\textbf{Using the addition formula, what is \( (3 + 2i) + (5 + 7i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 8 + 9i \)
+    \item \( 15 + 14i \)
+    \item \( 8 + 5i \)
+    \item \( 3 + 9i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Using \( (a + ib) + (c + id) = (a + c) + i(b + d) \): \( (3 + 2i) + (5 + 7i) = (3 + 5) + i(2 + 7) = 8 + 9i \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Formula Application:} Identify \( a = 3, b = 2, c = 5, d = 7 \), then apply: \( (a + c) + i(b + d) = 8 + 9i \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 46 ===================
+\begin{questiontitle}[MCQ 46]
+\textbf{Using the scalar multiplication formula, what is \( 3(2 + 5i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 6 + 5i \)
+    \item \( 2 + 15i \)
+    \item \( 6 + 15i \)
+    \item \( 5 + 6i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Using \( k(a + ib) = ka + ikb \): \( 3(2 + 5i) = 3 \cdot 2 + i \cdot 3 \cdot 5 = 6 + 15i \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Scalar Distribution:} The scalar \( k = 3 \) multiplies both parts: \( 3 \cdot 2 = 6 \) (real part) and \( 3 \cdot 5 = 15 \) (imaginary coefficient).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 47 ===================
+\begin{questiontitle}[MCQ 47]
+\textbf{Using the multiplication formula, what is \( (1 + 2i)(3 + i) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 3 + 7i \)
+    \item \( 1 + 7i \)
+    \item \( 5 + 7i \)
+    \item \( 3 + 5i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Using \( (a + ib)(c + id) = (ac - bd) + i(ad + bc) \) with \( a = 1, b = 2, c = 3, d = 1 \): \( (1 \cdot 3 - 2 \cdot 1) + i(1 \cdot 1 + 2 \cdot 3) = 1 + 7i \)
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Formula Breakdown:} Real part: \( ac - bd = 1(3) - 2(1) = 1 \). Imaginary part: \( ad + bc = 1(1) + 2(3) = 7 \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 48 ===================
+\begin{questiontitle}[MCQ 48]
+\textbf{The complex number \( z = 3 + 4i \) can be represented as the ordered pair:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (3, 4) \)
+    \item \( (4, 3) \)
+    \item \( (3, 4i) \)
+    \item \( (3i, 4) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+The complex number \( z = 3 + 4i \) is represented as the ordered pair \( (3, 4) \), where the first component is the real part and the second component is the imaginary part.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Ordered Pair Form:} For any complex number \( z = a + bi \), the ordered pair representation is \( (a, b) \) where \( a \) is the real part and \( b \) is the imaginary part coefficient.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 49 ===================
+\begin{questiontitle}[MCQ 49]
+\textbf{The ordered pair \( (5, -2) \) represents which complex number?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 5 - 2i \)
+    \item \( -2 + 5i \)
+    \item \( 5 + 2i \)
+    \item \( (5, -2i) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+The ordered pair \( (5, -2) \) represents the complex number \( 5 + (-2)i = 5 - 2i \), where 5 is the real part and -2 is the imaginary part.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Conversion Rule:} The ordered pair \( (a, b) \) corresponds to the complex number \( a + bi \). The first coordinate is always the real part, the second is the imaginary coefficient.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 50 ===================
+\begin{questiontitle}[MCQ 50]
+\textbf{If complex numbers are represented as ordered pairs, what is \( (2, 3) + (4, 5) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (6, 8) \)
+    \item \( (8, 15) \)
+    \item \( (2, 8) \)
+    \item \( (6, 15) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Addition of complex numbers as ordered pairs: \( (2, 3) + (4, 5) = (2 + 4, 3 + 5) = (6, 8) \). Add corresponding components.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Ordered Pair Addition:} \( (a, b) + (c, d) = (a + c, b + d) \). This corresponds to \( (a + bi) + (c + di) = (a + c) + (b + d)i \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 51 ===================
+\begin{questiontitle}[MCQ 51]
+\textbf{If complex numbers are represented as ordered pairs, what is \( 3 \cdot (2, 4) \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (6, 12) \)
+    \item \( (5, 7) \)
+    \item \( (2, 12) \)
+    \item \( (6, 4) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Scalar multiplication with ordered pairs: \( 3 \cdot (2, 4) = (3 \cdot 2, 3 \cdot 4) = (6, 12) \). Multiply each component by the scalar.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Scalar Multiplication Rule:} \( k \cdot (a, b) = (ka, kb) \). This corresponds to \( k(a + bi) = ka + kbi \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 52 ===================
+\begin{questiontitle}[MCQ 52]
+\textbf{In the complex plane, the ordered pair \( (3, -2) \) represents a point in which quadrant?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item First quadrant
+    \item Second quadrant
+    \item Third quadrant
+    \item Fourth quadrant
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: D} \\
+The ordered pair \( (3, -2) \) has positive real part (3) and negative imaginary part (-2), placing it in the fourth quadrant of the complex plane.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Complex Plane:} The horizontal axis represents real parts, the vertical axis represents imaginary parts. Quadrants follow the same rules as coordinate geometry.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 53 ===================
+\begin{questiontitle}[MCQ 53]
+\textbf{Which ordered pair represents the complex number \( 0 \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (0, 1) \)
+    \item \( (1, 0) \)
+    \item \( (0, 0) \)
+    \item \( (0, i) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The complex number \( 0 = 0 + 0i \) is represented by the ordered pair \( (0, 0) \), where both real and imaginary parts are zero.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Special Cases:} Real numbers have the form \( (a, 0) \), purely imaginary numbers have the form \( (0, b) \), and zero is \( (0, 0) \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 54 ===================
+\begin{questiontitle}[MCQ 54]
+\textbf{Two complex numbers represented as ordered pairs \( (a, b) \) and \( (c, d) \) are equal if and only if:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( a = c \) only
+    \item \( b = d \) only
+    \item \( a = c \) and \( b = d \)
+    \item \( a + b = c + d \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Two complex numbers \( (a, b) \) and \( (c, d) \) are equal if and only if \( a = c \) and \( b = d \). Both corresponding components must be equal.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Equality Condition:} \( (a, b) = (c, d) \) if and only if \( a = c \) and \( b = d \). This corresponds to \( a + bi = c + di \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 55 ===================
+\begin{questiontitle}[MCQ 55]
+\textbf{The set \( \mathbb{C} \) of complex numbers satisfies all the:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Group axioms only
+    \item Ring axioms only
+    \item Field axioms
+    \item Order axioms
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The set \( \mathbb{C} \) of complex numbers satisfies all the field axioms, making it a field just like the real numbers \( \mathbb{R} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Field Structure:} A field is an algebraic structure with two operations (addition and multiplication) that satisfy specific axioms including closure, associativity, commutativity, identity elements, and inverses.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 56 ===================
+\begin{questiontitle}[MCQ 56]
+\textbf{Since \( \mathbb{C} \) satisfies all field axioms, it possesses the same algebraic properties as:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Natural numbers \( \mathbb{N} \)
+    \item Integers \( \mathbb{Z} \)
+    \item Rational numbers \( \mathbb{Q} \)
+    \item Real numbers \( \mathbb{R} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: D} \\
+Since \( \mathbb{C} \) satisfies all field axioms, it possesses the same algebraic properties as real numbers \( \mathbb{R} \). Both are fields with identical structural properties.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Field Examples:} \( \mathbb{Q} \), \( \mathbb{R} \), and \( \mathbb{C} \) are all fields. However, \( \mathbb{N} \) and \( \mathbb{Z} \) are not fields because they lack multiplicative inverses for all non-zero elements.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 57 ===================
+\begin{questiontitle}[MCQ 57]
+\textbf{The additive identity in \( \mathbb{C} \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 1 + 0i \)
+    \item \( 0 + 0i \)
+    \item \( 0 + 1i \)
+    \item \( 1 + 1i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The additive identity in \( \mathbb{C} \) is \( 0 + 0i = 0 \). For any complex number \( z \), we have \( z + 0 = z \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Identity Element:} The additive identity is the element that, when added to any element in the set, leaves that element unchanged. In \( \mathbb{C} \), this is \( 0 = 0 + 0i \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 58 ===================
+\begin{questiontitle}[MCQ 58]
+\textbf{The multiplicative identity in \( \mathbb{C} \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 0 + 0i \)
+    \item \( 1 + 0i \)
+    \item \( 0 + 1i \)
+    \item \( 1 + 1i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The multiplicative identity in \( \mathbb{C} \) is \( 1 + 0i = 1 \). For any complex number \( z \), we have \( z \cdot 1 = z \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Multiplicative Identity:} The multiplicative identity is the element that, when multiplied by any element in the set, leaves that element unchanged. In \( \mathbb{C} \), this is \( 1 = 1 + 0i \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 59 ===================
+\begin{questiontitle}[MCQ 59]
+\textbf{For every non-zero complex number \( z \in \mathbb{C} \), there exists:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Only an additive inverse
+    \item Only a multiplicative inverse
+    \item Both additive and multiplicative inverses
+    \item Neither additive nor multiplicative inverse
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+For every complex number \( z \), there exists an additive inverse \( -z \) such that \( z + (-z) = 0 \). For every non-zero \( z \), there exists a multiplicative inverse \( z^{-1} \) such that \( z \cdot z^{-1} = 1 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Inverse Axioms:} Every element has an additive inverse, and every non-zero element has a multiplicative inverse. This is what makes \( \mathbb{C} \) a field.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 60 ===================
+\begin{questiontitle}[MCQ 60]
+\textbf{The multiplicative inverse of the complex number \( z = a + bi \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \frac{a + bi}{a^2 + b^2} \)
+    \item \( \frac{a - bi}{a^2 + b^2} \)
+    \item \( \frac{a - bi}{a^2 - b^2} \)
+    \item \( \frac{a + bi}{a^2 - b^2} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The multiplicative inverse of \( z = a + bi \) is \( z^{-1} = \frac{a - bi}{a^2 + b^2} = \frac{a}{a^2 + b^2} - \frac{b}{a^2 + b^2}i \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Inverse Formula:} To find \( z^{-1} \), multiply numerator and denominator by the conjugate \( \bar{z} \): \( z^{-1} = \frac{1}{z} = \frac{\bar{z}}{z \cdot \bar{z}} = \frac{\bar{z}}{|z|^2} \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 61 ===================
+\begin{questiontitle}[MCQ 61]
+\textbf{The multiplicative inverse of the complex number \( (a, b) \) in ordered pair form is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \left(\frac{a}{a^2 + b^2}, \frac{b}{a^2 + b^2}\right) \)
+    \item \( \left(\frac{a}{a^2 + b^2}, \frac{-b}{a^2 + b^2}\right) \)
+    \item \( \left(\frac{a}{a^2 - b^2}, \frac{-b}{a^2 - b^2}\right) \)
+    \item \( \left(\frac{-a}{a^2 + b^2}, \frac{b}{a^2 + b^2}\right) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The multiplicative inverse of \( (a, b) \) is \( \left(\frac{a}{a^2 + b^2}, \frac{-b}{a^2 + b^2}\right) \). The first component uses \( a \), the second uses \( -b \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Ordered Pair Pattern:} For \( (a, b)^{-1} \), the denominator is always \( a^2 + b^2 \). The numerators are \( a \) and \( -b \) respectively.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 62 ===================
+\begin{questiontitle}[MCQ 62]
+\textbf{What is the multiplicative inverse of \( z = 3 + 4i \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \frac{3 - 4i}{25} \)
+    \item \( \frac{3 + 4i}{25} \)
+    \item \( \frac{3 - 4i}{7} \)
+    \item \( \frac{3 + 4i}{7} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Using the formula \( z^{-1} = \frac{a - bi}{a^2 + b^2} \) with \( a = 3, b = 4 \): \( z^{-1} = \frac{3 - 4i}{3^2 + 4^2} = \frac{3 - 4i}{25} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Step-by-Step:} Calculate \( a^2 + b^2 = 9 + 16 = 25 \), then form \( \frac{a - bi}{25} = \frac{3 - 4i}{25} = \frac{3}{25} - \frac{4}{25}i \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 63 ===================
+\begin{questiontitle}[MCQ 63]
+\textbf{What is the multiplicative inverse of \( (1, 2) \) in ordered pair form?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \left(\frac{1}{5}, \frac{2}{5}\right) \)
+    \item \( \left(\frac{1}{5}, \frac{-2}{5}\right) \)
+    \item \( \left(\frac{1}{3}, \frac{-2}{3}\right) \)
+    \item \( \left(\frac{2}{5}, \frac{1}{5}\right) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Using the formula \( (a, b)^{-1} = \left(\frac{a}{a^2 + b^2}, \frac{-b}{a^2 + b^2}\right) \) with \( a = 1, b = 2 \): \( (1, 2)^{-1} = \left(\frac{1}{5}, \frac{-2}{5}\right) \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Calculation:} \( a^2 + b^2 = 1^2 + 2^2 = 5 \). So the inverse is \( \left(\frac{1}{5}, \frac{-2}{5}\right) \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 64 ===================
+\begin{questiontitle}[MCQ 64]
+\textbf{If \( z = 2 + 3i \) and \( z^{-1} = \frac{2 - 3i}{13} \), what is \( z \cdot z^{-1} \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 0 \)
+    \item \( 1 \)
+    \item \( 2 + 3i \)
+    \item \( 13 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+By definition, \( z \cdot z^{-1} = 1 \) for any non-zero complex number \( z \). This is the fundamental property of multiplicative inverses.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Inverse Property:} The multiplicative inverse \( z^{-1} \) is defined such that \( z \cdot z^{-1} = z^{-1} \cdot z = 1 \). This is what makes it an "inverse".
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 65 ===================
+\begin{questiontitle}[MCQ 65]
+\textbf{What is the multiplicative inverse of the real number \( 5 \) using the complex number formula?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \frac{1}{5} \)
+    \item \( \frac{5}{25} \)
+    \item \( \frac{-5}{25} \)
+    \item \( 5 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+For the real number \( 5 = 5 + 0i \), using \( z^{-1} = \frac{a - bi}{a^2 + b^2} \): \( 5^{-1} = \frac{5 - 0i}{5^2 + 0^2} = \frac{5}{25} = \frac{1}{5} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Real Number Case:} When \( b = 0 \), the formula reduces to \( \frac{a}{a^2} = \frac{1}{a} \), which is the familiar real number reciprocal.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 66 ===================
+\begin{questiontitle}[MCQ 66]
+\textbf{What is the multiplicative inverse of \( 4i \) in standard form?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \frac{-i}{4} \)
+    \item \( \frac{i}{4} \)
+    \item \( \frac{4i}{16} \)
+    \item \( \frac{-4i}{16} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+For \( 4i = 0 + 4i \), using \( z^{-1} = \frac{a - bi}{a^2 + b^2} \): \( (4i)^{-1} = \frac{0 - 4i}{0^2 + 4^2} = \frac{-4i}{16} = \frac{-i}{4} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Purely Imaginary Case:} When \( a = 0 \), the formula becomes \( \frac{-bi}{b^2} = \frac{-i}{b} \). The inverse of \( bi \) is \( \frac{-i}{b} \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 67 ===================
+\begin{questiontitle}[MCQ 67]
+\textbf{The set \( \mathbb{C} \) of complex numbers:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Satisfies all order axioms
+    \item Does not satisfy the order axioms
+    \item Satisfies some order axioms
+    \item Has a natural ordering like real numbers
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The set \( \mathbb{C} \) of complex numbers does not satisfy the order axioms. Unlike real numbers, complex numbers cannot be arranged in a meaningful order.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Key Difference:} While \( \mathbb{C} \) satisfies all field axioms (making it algebraically complete), it lacks the order structure that \( \mathbb{R} \) possesses.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 68 ===================
+\begin{questiontitle}[MCQ 68]
+\textbf{Which statement about comparing complex numbers is TRUE?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 3 + 4i > 2 + 5i \)
+    \item \( 1 + i < 2 + 2i \)
+    \item There is no sense in saying one complex number is greater or less than another
+    \item Complex numbers can be ordered by their real parts only
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+There is no sense in saying that one complex number is greater or less than another. The concepts of "greater than" and "less than" are not defined for complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{No Natural Ordering:} Unlike real numbers where we can always say \( a < b \) or \( a > b \) for any two different numbers, complex numbers lack this ordering property.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 69 ===================
+\begin{questiontitle}[MCQ 69]
+\textbf{Why can't complex numbers be ordered like real numbers?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Because they have two components (real and imaginary)
+    \item Because any ordering would contradict the field properties
+    \item Because they contain the imaginary unit \( i \)
+    \item All of the above contribute to the impossibility
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: D} \\
+All factors contribute: the two-dimensional nature of complex numbers, the presence of the imaginary unit \( i \), and the fact that any attempted ordering would contradict the field properties of \( \mathbb{C} \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Fundamental Issue:} Any ordering on \( \mathbb{C} \) that preserves field operations would require \( i^2 = -1 > 0 \), which contradicts \( -1 < 0 \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 70 ===================
+\begin{questiontitle}[MCQ 70]
+\textbf{Although complex numbers cannot be ordered, we can compare their:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real parts only
+    \item Imaginary parts only
+    \item Moduli (absolute values)
+    \item Arguments only
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Although complex numbers cannot be ordered, we can compare their moduli (absolute values). For example, \( |3 + 4i| = 5 > 3 = |3| \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Modulus Comparison:} The modulus \( |z| \) of a complex number is always a non-negative real number, so moduli can be compared using the real number ordering.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 71 ===================
+\begin{questiontitle}[MCQ 71]
+\textbf{Which property distinguishes \( \mathbb{R} \) from \( \mathbb{C} \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( \mathbb{R} \) satisfies field axioms, \( \mathbb{C} \) does not
+    \item \( \mathbb{R} \) has an ordering, \( \mathbb{C} \) does not
+    \item \( \mathbb{R} \) has additive inverses, \( \mathbb{C} \) does not
+    \item \( \mathbb{R} \) has multiplicative inverses, \( \mathbb{C} \) does not
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Both \( \mathbb{R} \) and \( \mathbb{C} \) satisfy all field axioms, but \( \mathbb{R} \) has a natural ordering (order axioms) while \( \mathbb{C} \) does not.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Ordered vs Unordered Fields:} \( \mathbb{R} \) is an ordered field, while \( \mathbb{C} \) is an unordered field. This is the key structural difference between them.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 72 ===================
+\begin{questiontitle}[MCQ 72]
+\textbf{Because complex numbers cannot be ordered, which operation is impossible?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Finding the maximum of a set of complex numbers
+    \item Adding complex numbers
+    \item Finding the conjugate of a complex number
+    \item Multiplying complex numbers
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+Finding the maximum of a set of complex numbers is impossible because "maximum" requires an ordering. Without ordering, we cannot determine which complex number is "largest."
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Ordering-Dependent Concepts:} Maximum, minimum, supremum, infimum, and similar concepts require ordering. These are undefined for complex numbers as a whole.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 73 ===================
+\begin{questiontitle}[MCQ 73]
+\textbf{The relationship between complex numbers and points in the coordinate plane is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Many complex numbers can represent one point
+    \item One complex number can represent many points
+    \item Every complex number is represented by one and only one point
+    \item Some complex numbers have no point representation
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Every complex number is represented by one and only one point in the coordinate plane, and every point represents one and only one complex number. This is called a one-to-one correspondence.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Bijection:} The mapping between complex numbers and points in the plane is bijective (one-to-one and onto), meaning there's a perfect correspondence between \( \mathbb{C} \) and \( \mathbb{R}^2 \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 74 ===================
+\begin{questiontitle}[MCQ 74]
+\textbf{For the complex number \( z = 3 + 4i \), what are the coordinates of its representing point?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (4, 3) \)
+    \item \( (3, 4) \)
+    \item \( (3, 4i) \)
+    \item \( (3i, 4) \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The complex number \( z = 3 + 4i \) is represented by the point \( (3, 4) \), where the real part 3 is the x-coordinate and the imaginary part 4 is the y-coordinate.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Coordinate Rule:} For any complex number \( z = a + bi \), the representing point has coordinates \( (a, b) \) where \( a \) is the x-coordinate and \( b \) is the y-coordinate.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 75 ===================
+\begin{questiontitle}[MCQ 75]
+\textbf{In the complex plane representation, the x-axis is called the:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Imaginary axis
+    \item Real axis
+    \item Complex axis
+    \item Z-axis
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+In the complex plane representation, the x-axis is called the real axis because it represents the real parts of complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Real Axis:} Points on the real axis have the form \( (a, 0) \), representing real numbers \( a + 0i = a \). This axis contains all real numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 76 ===================
+\begin{questiontitle}[MCQ 76]
+\textbf{In the complex plane representation, the y-axis is called the:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real axis
+    \item Imaginary axis
+    \item Complex axis
+    \item Coordinate axis
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+In the complex plane representation, the y-axis is called the imaginary axis because it represents the imaginary parts of complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Imaginary Axis:} Points on the imaginary axis have the form \( (0, b) \), representing purely imaginary numbers \( 0 + bi = bi \). This axis contains all purely imaginary numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 77 ===================
+\begin{questiontitle}[MCQ 77]
+\textbf{The coordinate plane used to represent complex numbers is called the:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Cartesian plane
+    \item Complex plane or z-plane
+    \item Real plane
+    \item Imaginary plane
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The coordinate plane used to represent complex numbers is called the complex plane or z-plane, named after the common variable \( z \) used for complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Alternative Names:} The complex plane is also called the z-plane, Argand plane (after Jean-Robert Argand), or Gaussian plane (after Carl Friedrich Gauss).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 78 ===================
+\begin{questiontitle}[MCQ 78]
+\textbf{The point \( (-2, 5) \) in the complex plane represents which complex number?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( -2 + 5i \)
+    \item \( 5 - 2i \)
+    \item \( -2 - 5i \)
+    \item \( 2 + 5i \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+The point \( (-2, 5) \) represents the complex number \( -2 + 5i \), where -2 is the real part (x-coordinate) and 5 is the imaginary part (y-coordinate).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Conversion Rule:} Any point \( (a, b) \) in the complex plane corresponds to the complex number \( a + bi \). The first coordinate is always the real part.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 79 ===================
+\begin{questiontitle}[MCQ 79]
+\textbf{A point on the real axis in the complex plane represents:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item A purely imaginary number
+    \item A real number
+    \item Any complex number
+    \item The origin only
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+A point on the real axis has coordinates \( (a, 0) \) and represents the real number \( a + 0i = a \). All real numbers lie on the real axis.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Axis Representation:} Real axis contains all real numbers \( a + 0i \), imaginary axis contains all purely imaginary numbers \( 0 + bi \), and the origin \( (0, 0) \) represents zero.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 80 ===================
+\begin{questiontitle}[MCQ 80]
+\textbf{In the complex plane, the point \( (0, 3) \) represents:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item The real number 3
+    \item The complex number \( 3 + 0i \)
+    \item The purely imaginary number \( 3i \)
+    \item The point is not in the complex plane
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The point \( (0, 3) \) represents the purely imaginary number \( 0 + 3i = 3i \). It lies on the imaginary axis.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Imaginary Axis Points:} Any point \( (0, b) \) on the imaginary axis represents the purely imaginary number \( bi \). These numbers have zero real part.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 81 ===================
+\begin{questiontitle}[MCQ 81]
+\textbf{The figure representing one or more complex numbers on the complex plane is called:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item A coordinate diagram
+    \item An Argand diagram
+    \item A Cartesian diagram
+    \item A geometric diagram
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The figure representing one or more complex numbers on the complex plane is called an Argand diagram, named after Jean-Robert Argand who popularized this representation.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Historical Note:} The Argand diagram is named after Jean-Robert Argand (1768-1822), a Swiss mathematician who developed this geometric representation of complex numbers.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 82 ===================
+\begin{questiontitle}[MCQ 82]
+\textbf{An Argand diagram is used to:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Solve algebraic equations only
+    \item Represent complex numbers geometrically
+    \item Calculate real number operations
+    \item Draw coordinate axes
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+An Argand diagram is a way of representing one or more complex numbers geometrically on the complex plane, making abstract complex numbers visually concrete.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Geometric Representation:} Argand diagrams transform abstract algebraic concepts into visual geometric representations, making complex number operations easier to understand and visualize.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 83 ===================
+\begin{questiontitle}[MCQ 83]
+\textbf{An Argand diagram can represent:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Only one complex number at a time
+    \item Only multiple complex numbers together
+    \item One or more complex numbers
+    \item Only real numbers
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+An Argand diagram can represent one or more complex numbers on the complex plane. It's flexible enough to show individual numbers or sets of complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Flexibility:} Argand diagrams can display single points (individual complex numbers), multiple discrete points, or even continuous curves representing sets of complex numbers satisfying certain conditions.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 84 ===================
+\begin{questiontitle}[MCQ 84]
+\textbf{The Argand diagram is drawn on the:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real number line
+    \item Cartesian coordinate system
+    \item Complex plane
+    \item Three-dimensional space
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The Argand diagram is drawn on the complex plane, where the x-axis represents real parts and the y-axis represents imaginary parts of complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Foundation:} The complex plane (with real and imaginary axes) provides the coordinate system for Argand diagrams, just as the Cartesian plane provides the foundation for graphing real functions.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 85 ===================
+\begin{questiontitle}[MCQ 85]
+\textbf{In an Argand diagram, the complex numbers \( 2 + 3i \) and \( -1 + 4i \) would appear as:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Two points at \( (2, 3) \) and \( (-1, 4) \)
+    \item Two lines from the origin
+    \item Two vectors in 3D space
+    \item Two curves on the plane
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+In an Argand diagram, \( 2 + 3i \) appears as the point \( (2, 3) \) and \( -1 + 4i \) appears as the point \( (-1, 4) \). Each complex number corresponds to exactly one point.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Point Representation:} Each complex number \( a + bi \) appears as a single point \( (a, b) \) in the Argand diagram. Multiple complex numbers appear as multiple points.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 86 ===================
+\begin{questiontitle}[MCQ 86]
+\textbf{The Argand diagram is also known as the:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Real plane
+    \item Complex plane representation
+    \item Imaginary coordinate system
+    \item Algebraic diagram
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The Argand diagram is also known as the complex plane representation. It's the geometric visualization of the complex plane with plotted complex numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Terminology:} "Argand diagram," "complex plane representation," and "geometric representation of complex numbers" all refer to the same concept of plotting complex numbers as points on a plane.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 87 ===================
+\begin{questiontitle}[MCQ 87]
+\textbf{The main benefit of using an Argand diagram is that it:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Eliminates the need for calculations
+    \item Makes complex numbers visually understandable
+    \item Converts complex numbers to real numbers
+    \item Simplifies algebraic operations
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The main benefit of using an Argand diagram is that it makes complex numbers visually understandable by representing them as points in a plane, bridging abstract algebra and concrete geometry.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Visual Learning:} Argand diagrams help students understand complex number operations geometrically, making concepts like addition, multiplication, and conjugation more intuitive through visual representation.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 88 ===================
+\begin{questiontitle}[MCQ 88]
+\textbf{The modulus of the complex number \( x + iy \) is:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( x + y \)
+    \item \( \sqrt{x^2 + y^2} \)
+    \item \( x^2 + y^2 \)
+    \item \( \sqrt{x + y} \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The modulus of the complex number \( x + iy \) is \( \sqrt{x^2 + y^2} \). This is the standard formula for the absolute value of a complex number.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Modulus Formula:} For any complex number \( z = x + iy \), the modulus is \( |z| = \sqrt{x^2 + y^2} \), where \( x \) is the real part and \( y \) is the imaginary part.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 89 ===================
+\begin{questiontitle}[MCQ 89]
+\textbf{The modulus of the complex number \( x + iy \) is denoted by:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( (x + iy) \)
+    \item \( |x + iy| \)
+    \item \( \overline{x + iy} \)
+    \item \( [x + iy] \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+The modulus of the complex number \( x + iy \) is denoted by \( |x + iy| \), using the same absolute value notation as for real numbers.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Notation Consistency:} The modulus notation \( |z| \) extends the familiar absolute value notation from real numbers to complex numbers, maintaining mathematical consistency.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 90 ===================
+\begin{questiontitle}[MCQ 90]
+\textbf{Geometrically, the modulus of a complex number represents:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item The x-coordinate of the point
+    \item The y-coordinate of the point
+    \item The distance from the origin to the point
+    \item The angle from the positive x-axis
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+Geometrically, the modulus of a complex number is the distance from the origin to the point representing the number in the complex plane.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Distance Interpretation:} The modulus \( |z| \) gives the straight-line distance from the origin \( (0, 0) \) to the point \( (x, y) \) representing the complex number \( z = x + iy \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 91 ===================
+\begin{questiontitle}[MCQ 91]
+\textbf{What is the modulus of the complex number \( 3 + 4i \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 7 \)
+    \item \( 5 \)
+    \item \( 25 \)
+    \item \( 12 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+Using the formula \( |x + iy| = \sqrt{x^2 + y^2} \) with \( x = 3, y = 4 \): \( |3 + 4i| = \sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Pythagorean Connection:} The modulus formula is essentially the Pythagorean theorem applied to the right triangle formed by the real part, imaginary part, and the distance to the origin.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 92 ===================
+\begin{questiontitle}[MCQ 92]
+\textbf{What is the modulus of the real number \( -5 \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( -5 \)
+    \item \( 5 \)
+    \item \( 25 \)
+    \item \( 0 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+For the real number \( -5 = -5 + 0i \), the modulus is \( |-5 + 0i| = \sqrt{(-5)^2 + 0^2} = \sqrt{25} = 5 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Real Number Case:} For real numbers, the modulus reduces to the familiar absolute value: \( |a + 0i| = \sqrt{a^2} = |a| \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 93 ===================
+\begin{questiontitle}[MCQ 93]
+\textbf{What is the modulus of the purely imaginary number \( 6i \)?}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item \( 6i \)
+    \item \( 6 \)
+    \item \( 36 \)
+    \item \( -6 \)
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: B} \\
+For the purely imaginary number \( 6i = 0 + 6i \), the modulus is \( |0 + 6i| = \sqrt{0^2 + 6^2} = \sqrt{36} = 6 \).
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Purely Imaginary Case:} For purely imaginary numbers \( bi \), the modulus is \( |bi| = \sqrt{0^2 + b^2} = |b| \), the absolute value of the coefficient.
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 94 ===================
+\begin{questiontitle}[MCQ 94]
+\textbf{The modulus formula \( |x + iy| = \sqrt{x^2 + y^2} \) is equivalent to:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item The distance formula from \( (0, 0) \) to \( (x, y) \)
+    \item The midpoint formula
+    \item The slope formula
+    \item The area formula
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: A} \\
+The modulus formula \( |x + iy| = \sqrt{x^2 + y^2} \) is equivalent to the distance formula from the origin \( (0, 0) \) to the point \( (x, y) \) in the coordinate plane.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Distance Formula:} The general distance formula between points \( (x_1, y_1) \) and \( (x_2, y_2) \) is \( \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2} \). For the origin to \( (x, y) \), this becomes \( \sqrt{x^2 + y^2} \).
+\end{conceptbox}
+
+\newpage
+% =================== MCQ 95 ===================
+\begin{questiontitle}[MCQ 95]
+\textbf{The modulus of any complex number is always:}
+\end{questiontitle}
+
+\begin{partbox}[Options]
+\begin{enumerate}[label=\Alph*.]
+    \item Positive
+    \item Negative
+    \item Non-negative
+    \item Complex
+\end{enumerate}
+\end{partbox}
+
+\begin{answerstyle}
+\textbf{Answer: C} \\
+The modulus of any complex number is always non-negative (greater than or equal to zero). It equals zero only when the complex number is zero, and is positive otherwise.
+\end{answerstyle}
+
+\begin{conceptbox}
+\textbf{Non-negative Property:} Since \( |z| = \sqrt{x^2 + y^2} \) and square roots of real numbers are non-negative, we have \( |z| \geq 0 \) for all complex numbers \( z \).
+\end{conceptbox}
+
+\newpage
+
+\end{document}

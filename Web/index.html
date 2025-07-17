@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hacking Terminal</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        font-size: 1.5rem;
+        background-color: black;
+        color: rgb(0, 176, 0);
+        padding: 10px;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+      
+      .blink {
+        animation: blink 1s infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div hidden>Initializing<span class="blink">...</span></div>
+      <div hidden>Reading Your Files<span class="blink">...</span></div>
+      <div hidden>Password Files Detected<span class="blink">...</span></div>
+      <div hidden>Sending All Passwords and Personal Files to server<span class="blink">...</span></div>
+      <div hidden>Cleaning Up<span class="blink">...</span></div>
+    </div>
+    <script>
+      async function hacking() {
+        const divs = document.querySelectorAll(".container > div");
+        const promises = Array.from(divs).map((div, index) => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              div.hidden = false;
+              resolve();
+            }, (index + 1) * 3000);
+          });
+        });
+        
+        // Wait for all divs to be shown
+        await Promise.all(promises);
+        
+        // Wait a bit more for the last message to be read
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        
+        // Clean up - remove all divs
+        const container = document.querySelector(".container");
+        container.innerHTML = "";
+      }
+      
+      async function main(){
+        await hacking();
+      }
+      
+      // Wait for DOM to be loaded, then start the process
+      document.addEventListener('DOMContentLoaded', () => {
+        main();
+      });
+    </script>
+  </body>
+</html>

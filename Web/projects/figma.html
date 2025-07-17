@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Factorial</title>
+  <link rel="shortcut icon" href="Qalam UI.ico" type="image/x-icon">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    html, body {
+      height: 100%;
+    }
+    body {
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+      transition: background 0.5s, color 0.5s;
+    }
+    body.dark-mode {
+      background: #181a20;
+      color: #f3f3f7;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: transparent;
+      border-radius: 24px;
+      padding: 40px 32px 32px 32px;
+      min-width: 320px;
+      animation: fadeIn 1.2s cubic-bezier(.4,0,.2,1);
+      border: none;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .container:before {
+      content: '';
+      display: none;
+    }
+    .text {
+      width: 220px;
+      height: 44px;
+      background: #f7f8fa;
+      color: #222;
+      border: none;
+      border-radius: 12px;
+      padding: 0 16px;
+      font-size: 18px;
+      font-weight: 500;
+      box-shadow: 0 2px 8px 0 rgba(60, 60, 120, 0.06);
+      outline: none;
+      transition: box-shadow 0.3s, background 0.3s, color 0.3s;
+      text-align: center;
+      z-index: 1;
+    }
+    body.dark-mode .text {
+      background: #23242a;
+      color: #f3f3f7;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+    }
+    .text:focus {
+      background: #fff;
+      box-shadow: 0 4px 16px 0 rgba(60, 60, 120, 0.12);
+      color: #1a73e8;
+    }
+    body.dark-mode .text:focus {
+      background: #23242a;
+      color: #6a82fb;
+    }
+    .Calculate {
+      width: 160px;
+      height: 44px;
+      background: linear-gradient(90deg, #1a73e8 0%, #6a82fb 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px 0 rgba(60, 60, 120, 0.08);
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      user-select: none;
+      border: none;
+      z-index: 1;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    .Calculate::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.08);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .Calculate:hover {
+      background: linear-gradient(90deg, #6a82fb 0%, #1a73e8 100%);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 24px 0 rgba(60, 60, 120, 0.16);
+    }
+    .Calculate:active {
+      transform: scale(0.98);
+    }
+    .Calculate:focus {
+      outline: 2px solid #1a73e8;
+    }
+    .result {
+      margin-top: 8px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a73e8;
+      min-height: 28px;
+      letter-spacing: 0.2px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    body.dark-mode .result {
+      color: #6a82fb;
+    }
+    .result.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .toggle-mode {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-size: 22px;
+      color: #1a73e8;
+      transition: color 0.3s;
+      z-index: 2;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    body.dark-mode .toggle-mode {
+      color: #f3f3f7;
+      background: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="toggle-mode" id="toggleMode" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+    <input type="text" class="text" placeholder="Enter a number...">
+    <div class="Calculate" tabindex="0">Calculate</div>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    function factorial(n) {
+      n = parseInt(n);
+      if (isNaN(n) || n < 0) return 'Enter a non-negative integer';
+      if (n === 0 || n === 1) return 1;
+      let res = 1;
+      for (let i = 2; i <= n; i++) res *= i;
+      return res;
+    }
+    const text = document.querySelector('.text');
+    const Calculate = document.querySelector('.Calculate');
+    const resultDiv = document.getElementById('result');
+    function showResult(result) {
+      resultDiv.textContent = result;
+      resultDiv.classList.add('visible');
+    }
+    Calculate.addEventListener('click', () => {
+      resultDiv.classList.remove('visible');
+      setTimeout(() => {
+        let number = text.value;
+        let result = factorial(number);
+        showResult(result);
+      }, 200);
+    });
+    text.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        Calculate.click();
+      }
+    });
+    // Dark mode toggle
+    const toggleModeBtn = document.getElementById('toggleMode');
+    function setMode(dark) {
+      if (dark) {
+        document.body.classList.add('dark-mode');
+        toggleModeBtn.textContent = '☀️';
+        toggleModeBtn.title = 'Switch to light mode';
+        toggleModeBtn.setAttribute('aria-label', 'Switch to light mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+        toggleModeBtn.textContent = '🌙';
+        toggleModeBtn.title = 'Switch to dark mode';
+        toggleModeBtn.setAttribute('aria-label', 'Switch to dark mode');
+      }
+    }
+    let dark = false;
+    toggleModeBtn.addEventListener('click', () => {
+      dark = !dark;
+      setMode(dark);
+    });
+    // Optionally, set initial mode based on system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      dark = true;
+      setMode(true);
+    }
+  </script>
+</body>
+</html>
