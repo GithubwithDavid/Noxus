@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Methods Test</title>
+</head>
+<body>
+    <h1>HTTP Methods Test</h1>
+    <button onclick="testGET()">Test GET</button>
+    <button onclick="testPOST()">Test POST</button>
+    <button onclick="testPUT()">Test PUT</button>
+    <button onclick="testDELETE()">Test DELETE</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testGET() {
+            try {
+                const response = await fetch('/api', {method: 'GET'});
+                const data = await response.text();
+                document.getElementById('result').innerHTML = `<p><strong>GET Response:</strong> ${data}</p>`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function testPOST() {
+            try {
+                const response = await fetch('/api', {method: 'POST'});
+                const data = await response.text();
+                document.getElementById('result').innerHTML = `<p><strong>POST Response:</strong> ${data}</p>`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function testPUT() {
+            try {
+                const response = await fetch('/api', {method: 'PUT'});
+                const data = await response.text();
+                document.getElementById('result').innerHTML = `<p><strong>PUT Response:</strong> ${data}</p>`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function testDELETE() {
+            try {
+                const response = await fetch('/api', {method: 'DELETE'});
+                const data = await response.text();
+                document.getElementById('result').innerHTML = `<p><strong>DELETE Response:</strong> ${data}</p>`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 
